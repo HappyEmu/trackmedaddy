@@ -34,4 +34,4 @@ src/
 
 - Base URL: `https://api.everhour.com`
 - Auth: `X-Api-Key` header on all requests
-- Endpoints used: `GET /tasks/search`, `POST /timers`, `DELETE /timers/current`
+- Endpoints used: `GET /tasks/search`, `POST /timers`, `GET /timers/current`, `DELETE /timers/current`

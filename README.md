@@ -36,6 +36,16 @@ everhour start ADM-13
 
 The command searches Everhour tasks for the ticket number and starts a timer on the first match.
 
+### Check timer status
+
+```sh
+everhour status
+# Running: Weekly [ADM-13] (elapsed: 00:00:04, today: 00:54:00)
+
+everhour status   # when no timer is running
+# No timer running.
+```
+
 ### Stop the current timer
 
 ```sh

@@ -70,6 +70,17 @@ everhour stop
 # Timer stopped: Weekly [ADM-13] (session: 00:01:00, today: 00:54:00)
 ```
 
+### Install AI agent skill
+
+Teach your AI coding agent (Claude Code, Codex) how to use everhour:
+
+```sh
+everhour skill claude   # installs to ~/.claude/commands/everhour.md
+everhour skill codex    # installs to ~/.codex/instructions/everhour.md
+```
+
+After installing, your agent can use `/everhour` to learn the CLI commands.
+
 ## Error handling
 
 ```sh

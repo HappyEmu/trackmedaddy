@@ -2,7 +2,7 @@ mod api;
 mod config;
 mod models;
 
-use anyhow::{Result, bail};
+use anyhow::{Context, Result, bail};
 use clap::{Parser, Subcommand};
 
 use api::EverhourClient;
@@ -31,6 +31,11 @@ enum Command {
     Status,
     /// Stop the currently running timer
     Stop,
+    /// Install the everhour skill/command for your AI coding agent
+    Skill {
+        /// Agent to install for: claude or codex
+        agent: String,
+    },
 }
 
 #[tokio::main(flavor = "current_thread")]
@@ -42,6 +47,7 @@ async fn main() -> Result<()> {
         Command::Start { ticket } => cmd_start(&ticket).await?,
         Command::Status => cmd_status().await?,
         Command::Stop => cmd_stop().await?,
+        Command::Skill { agent } => cmd_skill(&agent)?,
     }
     Ok(())
 }
@@ -69,6 +75,23 @@ fn cmd_logout() -> Result<()> {
         }
         Err(e) => return Err(e.into()),
     }
+    Ok(())
+}
+
+const SKILL_CONTENT: &str = include_str!("../skill.md");
+
+fn cmd_skill(agent: &str) -> Result<()> {
+    let home = dirs::home_dir().context("Could not determine home directory")?;
+    let path = match agent.to_lowercase().as_str() {
+        "claude" => home.join(".claude").join("commands").join("everhour.md"),
+        "codex" => home.join(".codex").join("instructions").join("everhour.md"),
+        _ => bail!("Unknown agent \"{agent}\". Supported: claude, codex"),
+    };
+    if let Some(parent) = path.parent() {
+        std::fs::create_dir_all(parent)?;
+    }
+    std::fs::write(&path, SKILL_CONTENT)?;
+    println!("Skill installed to {}", path.display());
     Ok(())
 }
 

@@ -16,6 +16,18 @@ pub struct StartTimerRequest {
     pub task: String,
 }
 
+// GET /timers/current response
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+#[allow(dead_code)]
+pub struct CurrentTimerResponse {
+    pub status: Option<String>,
+    pub duration: Option<i64>,
+    pub started_at: Option<String>,
+    pub task: Option<TaskInfo>,
+    pub today: Option<i64>,
+}
+
 // POST /timers response
 #[derive(Debug, Deserialize)]
 pub struct StartTimerResponse {

@@ -25,6 +25,8 @@ enum Command {
         /// Linear ticket identifier (e.g. TRG-80)
         ticket: String,
     },
+    /// Show the currently running timer
+    Status,
     /// Stop the currently running timer
     Stop,
 }
@@ -35,6 +37,7 @@ async fn main() -> Result<()> {
     match cli.command {
         Command::Login => cmd_login()?,
         Command::Start { ticket } => cmd_start(&ticket).await?,
+        Command::Status => cmd_status().await?,
         Command::Stop => cmd_stop().await?,
     }
     Ok(())
@@ -71,6 +74,29 @@ async fn cmd_start(ticket: &str) -> Result<()> {
         "Timer started (status: {})",
         timer.status.as_deref().unwrap_or("unknown")
     );
+    Ok(())
+}
+
+async fn cmd_status() -> Result<()> {
+    let config = load_config()?;
+    let client = EverhourClient::new(config.api_key);
+
+    let resp = client.current_timer().await?;
+    match resp.status.as_deref() {
+        Some("active") => {
+            let task_name = resp
+                .task
+                .as_ref()
+                .map(|t| t.name.as_str())
+                .unwrap_or("unknown");
+            let elapsed = format_duration(resp.duration.unwrap_or(0));
+            let today = format_duration(resp.today.unwrap_or(0));
+            println!("Running: {} (elapsed: {}, today: {})", task_name, elapsed, today);
+        }
+        _ => {
+            println!("No timer running.");
+        }
+    }
     Ok(())
 }
 

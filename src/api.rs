@@ -1,7 +1,9 @@
 use anyhow::{Result, bail};
 use reqwest::Client;
 
-use crate::models::{StartTimerRequest, StartTimerResponse, StopTimerResponse, Task};
+use crate::models::{
+    CurrentTimerResponse, StartTimerRequest, StartTimerResponse, StopTimerResponse, Task,
+};
 
 const BASE_URL: &str = "https://api.everhour.com";
 
@@ -36,6 +38,25 @@ impl EverhourClient {
 
         let tasks: Vec<Task> = resp.json().await?;
         Ok(tasks)
+    }
+
+    pub async fn current_timer(&self) -> Result<CurrentTimerResponse> {
+        let url = format!("{BASE_URL}/timers/current");
+        let resp = self
+            .http
+            .get(&url)
+            .header("X-Api-Key", &self.api_key)
+            .send()
+            .await?;
+
+        let status = resp.status();
+        if !status.is_success() {
+            let body = resp.text().await.unwrap_or_default();
+            bail!("Get current timer failed (HTTP {status}): {body}");
+        }
+
+        let timer: CurrentTimerResponse = resp.json().await?;
+        Ok(timer)
     }
 
     pub async fn start_timer(&self, task_id: &str) -> Result<StartTimerResponse> {

@@ -20,6 +20,8 @@ struct Cli {
 enum Command {
     /// Save your Everhour API key
     Login,
+    /// Remove your saved API key
+    Logout,
     /// Start a timer on a task matching the given ticket (e.g. TRG-80)
     Start {
         /// Linear ticket identifier (e.g. TRG-80)
@@ -36,6 +38,7 @@ async fn main() -> Result<()> {
     let cli = Cli::parse();
     match cli.command {
         Command::Login => cmd_login()?,
+        Command::Logout => cmd_logout()?,
         Command::Start { ticket } => cmd_start(&ticket).await?,
         Command::Status => cmd_status().await?,
         Command::Stop => cmd_stop().await?,
@@ -54,6 +57,18 @@ fn cmd_login() -> Result<()> {
     save_config(&Config { api_key: key })?;
     let path = config::config_path()?;
     println!("Config saved to {}", path.display());
+    Ok(())
+}
+
+fn cmd_logout() -> Result<()> {
+    let path = config::config_path()?;
+    match std::fs::remove_file(&path) {
+        Ok(()) => println!("Config removed: {}", path.display()),
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => {
+            println!("Already logged out (no config file found).");
+        }
+        Err(e) => return Err(e.into()),
+    }
     Ok(())
 }
 

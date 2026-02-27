@@ -24,6 +24,13 @@ everhour login
 
 The config path depends on your OS (uses the system config directory).
 
+To remove your saved API key:
+
+```sh
+everhour logout
+# Config removed: /Users/<you>/Library/Application Support/everhour/config.toml
+```
+
 ## Usage
 
 ### Start a timer

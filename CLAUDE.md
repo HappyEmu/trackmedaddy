@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Everhour CLI (`everhour`) — a Rust CLI tool for interacting with the Everhour time tracking API. Primary use case: start/stop timers on tasks that correspond to Linear tickets (e.g. `TRG-80`).
+Everhour CLI (`everhour`) — a Rust CLI tool for interacting with the Everhour time tracking API. Primary use case: start/stop timers on tasks that correspond to Linear tickets (e.g. `TRG-80`). Commands: `login`, `logout`, `start`, `status`, `stop`.
 
 ## Build & Run
 

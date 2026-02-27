@@ -74,16 +74,36 @@ async fn cmd_start(ticket: &str) -> Result<()> {
     Ok(())
 }
 
+fn format_duration(seconds: i64) -> String {
+    let h = seconds / 3600;
+    let m = (seconds % 3600) / 60;
+    let s = seconds % 60;
+    format!("{h:02}:{m:02}:{s:02}")
+}
+
 async fn cmd_stop() -> Result<()> {
     let config = load_config()?;
     let client = EverhourClient::new(config.api_key);
 
-    let timer = client.stop_timer().await?;
-    if let Some(duration) = timer.duration {
-        let hours = duration / 3600;
-        let minutes = (duration % 3600) / 60;
-        let seconds = duration % 60;
-        println!("Timer stopped. Duration: {hours:02}:{minutes:02}:{seconds:02}");
+    let resp = client.stop_timer().await?;
+    if let Some(task_time) = &resp.task_time {
+        let task_name = task_time
+            .task
+            .as_ref()
+            .map(|t| t.name.as_str())
+            .unwrap_or("unknown");
+        let session = task_time
+            .last_history
+            .as_ref()
+            .and_then(|h| h.time)
+            .unwrap_or(0);
+        let total_today = task_time.time.unwrap_or(0);
+        println!(
+            "Timer stopped: {} (session: {}, today: {})",
+            task_name,
+            format_duration(session),
+            format_duration(total_today),
+        );
     } else {
         println!("Timer stopped.");
     }

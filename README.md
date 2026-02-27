@@ -14,21 +14,23 @@ This installs the `everhour` binary to `~/.cargo/bin/`.
 
 ## Setup
 
-Get your API key from [Everhour > Settings > API](https://app.everhour.com/#/account/profile), then:
+Get your API key from your Everhour account settings, then:
 
 ```sh
 everhour login
 # Enter your Everhour API key: ****
-# Config saved to ~/.config/everhour/config.toml
+# Config saved to /Users/<you>/Library/Application Support/everhour/config.toml
 ```
+
+The config path depends on your OS (uses the system config directory).
 
 ## Usage
 
 ### Start a timer
 
 ```sh
-everhour start TRG-80
-# Found task: [TRG-80] Implement user authentication (ev:12345678)
+everhour start ADM-13
+# Found task: Weekly [ADM-13] (ev:250564033107246)
 # Timer started (status: active)
 ```
 
@@ -38,14 +40,14 @@ The command searches Everhour tasks for the ticket number and starts a timer on 
 
 ```sh
 everhour stop
-# Timer stopped. Duration: 01:23:45
+# Timer stopped: Weekly [ADM-13] (session: 00:01:00, today: 00:54:00)
 ```
 
 ## Error handling
 
 ```sh
 # Not logged in
-everhour start TRG-80
+everhour start ADM-13
 # Error: Could not read config file. Run `everhour login` to set up your API key.
 
 # No matching task

@@ -17,7 +17,7 @@ cargo build --release        # build release binary
 ```
 src/
   main.rs       -- CLI parsing (clap derive), subcommand dispatch, command handlers
-  config.rs     -- Config load/save (~/.config/everhour/config.toml)
+  config.rs     -- Config load/save (OS config dir, e.g. ~/Library/Application Support/everhour/config.toml on macOS)
   api.rs        -- Everhour API client (reqwest async)
   models.rs     -- Shared data types (Config, Task, Timer, etc.)
 ```

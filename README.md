@@ -6,7 +6,17 @@ A command-line tool for [Everhour](https://everhour.com) time tracking. Start an
 
 Requires [Rust](https://rustup.rs/) 1.85+.
 
+Install directly from GitHub:
+
 ```sh
+cargo install --git https://github.com/HappyEmu/trackmedaddy.git
+```
+
+Or clone and install locally:
+
+```sh
+git clone https://github.com/HappyEmu/trackmedaddy.git
+cd trackmedaddy
 cargo install --path .
 ```
 

@@ -2,14 +2,14 @@
 
 ## Project Overview
 
-Everhour CLI (`everhour`) — a Rust CLI tool for interacting with the Everhour time tracking API. Primary use case: start/stop timers on tasks that correspond to Linear tickets (e.g. `TRG-80`). Commands: `login`, `logout`, `start`, `status`, `stop`.
+TrackMeDaddy CLI (`trackmedaddy`) — a Rust CLI tool for interacting with the Everhour time tracking API. Primary use case: start/stop timers on tasks that correspond to Linear tickets (e.g. `TRG-80`). Commands: `login`, `logout`, `start`, `status`, `stop`.
 
 ## Build & Run
 
 ```
 cargo build                  # build debug binary
 cargo build --release        # build release binary
-./target/debug/everhour      # run debug binary
+./target/debug/trackmedaddy  # run debug binary
 ```
 
 ## Project Structure
@@ -17,7 +17,7 @@ cargo build --release        # build release binary
 ```
 src/
   main.rs       -- CLI parsing (clap derive), subcommand dispatch, command handlers
-  config.rs     -- Config load/save (OS config dir, e.g. ~/Library/Application Support/everhour/config.toml on macOS)
+  config.rs     -- Config load/save (OS config dir, e.g. ~/Library/Application Support/trackmedaddy/config.toml on macOS)
   api.rs        -- Everhour API client (reqwest async)
   models.rs     -- Shared data types (Config, Task, Timer, etc.)
 ```

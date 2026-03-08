@@ -1,4 +1,4 @@
-# everhour
+# trackmedaddy
 
 A command-line tool for [Everhour](https://everhour.com) time tracking. Start and stop timers on tasks using Linear ticket numbers.
 
@@ -20,16 +20,16 @@ cd trackmedaddy
 cargo install --path .
 ```
 
-This installs the `everhour` binary to `~/.cargo/bin/`.
+This installs the `trackmedaddy` binary to `~/.cargo/bin/`.
 
 ## Setup
 
 Get your API key from your Everhour account settings, then:
 
 ```sh
-everhour login
+trackmedaddy login
 # Enter your Everhour API key: ****
-# Config saved to /Users/<you>/Library/Application Support/everhour/config.toml
+# Config saved to /Users/<you>/Library/Application Support/trackmedaddy/config.toml
 ```
 
 The config path depends on your OS (uses the system config directory).
@@ -37,8 +37,8 @@ The config path depends on your OS (uses the system config directory).
 To remove your saved API key:
 
 ```sh
-everhour logout
-# Config removed: /Users/<you>/Library/Application Support/everhour/config.toml
+trackmedaddy logout
+# Config removed: /Users/<you>/Library/Application Support/trackmedaddy/config.toml
 ```
 
 ## Usage
@@ -46,7 +46,7 @@ everhour logout
 ### Start a timer
 
 ```sh
-everhour start ADM-13
+trackmedaddy start ADM-13
 # Found task: Weekly [ADM-13] (ev:250564033107246)
 # Timer started (status: active)
 ```
@@ -56,39 +56,39 @@ The command searches Everhour tasks for the ticket number and starts a timer on 
 ### Check timer status
 
 ```sh
-everhour status
+trackmedaddy status
 # Running: Weekly [ADM-13] (elapsed: 00:00:04, today: 00:54:00)
 
-everhour status   # when no timer is running
+trackmedaddy status   # when no timer is running
 # No timer running.
 ```
 
 ### Stop the current timer
 
 ```sh
-everhour stop
+trackmedaddy stop
 # Timer stopped: Weekly [ADM-13] (session: 00:01:00, today: 00:54:00)
 ```
 
 ### Install AI agent skill
 
-Teach your AI coding agent (Claude Code, Codex) how to use everhour:
+Teach your AI coding agent (Claude Code, Codex) how to use trackmedaddy:
 
 ```sh
-everhour skill claude   # installs to ~/.claude/commands/everhour.md
-everhour skill codex    # installs to ~/.codex/instructions/everhour.md
+trackmedaddy skill claude   # installs to ~/.claude/skills/trackmedaddy/SKILL.md
+trackmedaddy skill codex    # installs to ~/.codex/instructions/trackmedaddy.md
 ```
 
-After installing, your agent can use `/everhour` to learn the CLI commands.
+After installing, your agent can use `/trackmedaddy` to manage timers.
 
 ## Error handling
 
 ```sh
 # Not logged in
-everhour start ADM-13
-# Error: Could not read config file. Run `everhour login` to set up your API key.
+trackmedaddy start ADM-13
+# Error: Could not read config file. Run `trackmedaddy login` to set up your API key.
 
 # No matching task
-everhour start NONEXISTENT-99
+trackmedaddy start NONEXISTENT-99
 # Error: No tasks found matching "NONEXISTENT-99"
 ```

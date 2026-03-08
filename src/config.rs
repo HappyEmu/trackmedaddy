@@ -6,13 +6,19 @@ use crate::models::Config;
 
 pub fn config_path() -> Result<PathBuf> {
     let config_dir = dirs::config_dir().context("Could not determine config directory")?;
+    Ok(config_dir.join("trackmedaddy").join("config.toml"))
+}
+
+/// Path to the old config file from when the binary was named "everhour".
+pub fn legacy_config_path() -> Result<PathBuf> {
+    let config_dir = dirs::config_dir().context("Could not determine config directory")?;
     Ok(config_dir.join("everhour").join("config.toml"))
 }
 
 pub fn load_config() -> Result<Config> {
     let path = config_path()?;
     let content = std::fs::read_to_string(&path).context(
-        "Could not read config file. Run `everhour login` to set up your API key.",
+        "Could not read config file. Run `trackmedaddy login` to set up your API key.",
     )?;
     let config: Config =
         toml::from_str(&content).context("Could not parse config file")?;

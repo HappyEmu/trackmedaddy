@@ -1,48 +1,24 @@
-# Everhour CLI Usage
+---
+name: trackmedaddy
+description: Manage Everhour time tracking. Use when the user wants to start, stop, or check a timer for a Linear ticket. Triggers include "track time", "log time", "start working on", "what am I tracking", "stop timer", or any mention of tracking time on a ticket.
+argument-hint: "[start|stop|status|login|logout] [TICKET]"
+allowed-tools: Bash
+---
 
-`everhour` is a CLI tool for Everhour time tracking. It starts and stops timers on tasks using Linear ticket numbers.
+Run `trackmedaddy` with the appropriate subcommand based on $ARGUMENTS.
+
+If no arguments are provided, run `trackmedaddy status` to show the current timer.
 
 ## Commands
 
-### Login / Logout
+- `trackmedaddy start <TICKET>` — start a timer. `<TICKET>` is a Linear ticket ID (e.g. `TRG-80`, `ENG-123`).
+- `trackmedaddy stop` — stop the current timer.
+- `trackmedaddy status` — show the running timer.
+- `trackmedaddy login` — set up the Everhour API key (interactive prompt).
+- `trackmedaddy logout` — remove the stored API key.
 
-```sh
-everhour login    # prompts for API key, saves to config
-everhour logout   # removes saved API key
-```
+Always show the command output to the user.
 
-### Start a timer
+## Setup
 
-```sh
-everhour start <TICKET>
-```
-
-`<TICKET>` is a Linear ticket identifier like `TRG-80` or `ADM-13`. The command searches Everhour tasks matching that ticket and starts a timer on the first result.
-
-### Check status
-
-```sh
-everhour status
-```
-
-Shows the currently running timer with task name, elapsed time, and today's total. Prints "No timer running." if idle.
-
-### Stop the timer
-
-```sh
-everhour stop
-```
-
-Stops the current timer and shows task name, session duration, and today's total.
-
-## Typical workflow
-
-```sh
-everhour start TRG-80    # start working on a ticket
-everhour status          # check how long you've been going
-everhour stop            # done for now
-```
-
-## Config
-
-The API key is stored at the OS config directory (e.g. `~/Library/Application Support/everhour/config.toml` on macOS). Get your key from your Everhour account settings.
+If the command fails with a missing config or auth error, run `trackmedaddy login` to set up the API key.

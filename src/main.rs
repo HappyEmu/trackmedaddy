@@ -10,7 +10,7 @@ use config::{load_config, save_config};
 use models::Config;
 
 #[derive(Parser)]
-#[command(name = "everhour", about = "Everhour time tracking CLI")]
+#[command(name = "trackmedaddy", about = "CLI for Everhour time tracking")]
 struct Cli {
     #[command(subcommand)]
     command: Command,
@@ -31,7 +31,7 @@ enum Command {
     Status,
     /// Stop the currently running timer
     Stop,
-    /// Install the everhour skill/command for your AI coding agent
+    /// Install the trackmedaddy skill/command for your AI coding agent
     Skill {
         /// Agent to install for: claude or codex
         agent: String,
@@ -68,23 +68,59 @@ fn cmd_login() -> Result<()> {
 
 fn cmd_logout() -> Result<()> {
     let path = config::config_path()?;
-    match std::fs::remove_file(&path) {
-        Ok(()) => println!("Config removed: {}", path.display()),
-        Err(e) if e.kind() == std::io::ErrorKind::NotFound => {
-            println!("Already logged out (no config file found).");
+    let legacy_path = config::legacy_config_path()?;
+
+    let removed_current = remove_file_if_exists(&path)?;
+    let removed_legacy = remove_file_if_exists(&legacy_path)?;
+
+    if removed_current || removed_legacy {
+        if removed_current {
+            println!("Config removed: {}", path.display());
         }
-        Err(e) => return Err(e.into()),
+        if removed_legacy {
+            println!("Legacy config removed: {}", legacy_path.display());
+        }
+    } else {
+        println!("Already logged out (no config file found).");
     }
     Ok(())
+}
+
+/// Remove a file if it exists. Returns true if a file was removed.
+fn remove_file_if_exists(path: &std::path::Path) -> Result<bool> {
+    match std::fs::remove_file(path) {
+        Ok(()) => Ok(true),
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(false),
+        Err(e) => Err(e.into()),
+    }
 }
 
 const SKILL_CONTENT: &str = include_str!("../skill.md");
 
 fn cmd_skill(agent: &str) -> Result<()> {
     let home = dirs::home_dir().context("Could not determine home directory")?;
-    let path = match agent.to_lowercase().as_str() {
-        "claude" => home.join(".claude").join("commands").join("everhour.md"),
-        "codex" => home.join(".codex").join("instructions").join("everhour.md"),
+    let (path, legacy_paths) = match agent.to_lowercase().as_str() {
+        "claude" => {
+            let claude = home.join(".claude");
+            (
+                claude.join("skills").join("trackmedaddy").join("SKILL.md"),
+                vec![
+                    claude.join("commands").join("everhour.md"),
+                    claude.join("commands").join("trackmedaddy.md"),
+                ],
+            )
+        }
+        "codex" => {
+            let agents = home.join(".agents");
+            let codex = home.join(".codex");
+            (
+                agents.join("skills").join("trackmedaddy").join("SKILL.md"),
+                vec![
+                    codex.join("instructions").join("trackmedaddy.md"),
+                    codex.join("instructions").join("everhour.md"),
+                ],
+            )
+        }
         _ => bail!("Unknown agent \"{agent}\". Supported: claude, codex"),
     };
     if let Some(parent) = path.parent() {
@@ -92,6 +128,11 @@ fn cmd_skill(agent: &str) -> Result<()> {
     }
     std::fs::write(&path, SKILL_CONTENT)?;
     println!("Skill installed to {}", path.display());
+    for legacy in &legacy_paths {
+        if remove_file_if_exists(legacy)? {
+            println!("Removed old skill file: {}", legacy.display());
+        }
+    }
     Ok(())
 }
 

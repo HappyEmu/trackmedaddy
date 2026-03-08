@@ -4,23 +4,23 @@ A command-line tool for [Everhour](https://everhour.com) time tracking. Start an
 
 ## Installation
 
-Requires [Rust](https://rustup.rs/) 1.85+.
+### Shell installer (macOS / Linux)
 
-Install directly from GitHub:
+```sh
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/HappyEmu/trackmedaddy/releases/latest/download/trackmedaddy-installer.sh | sh
+```
+
+### From source
+
+Requires [Rust](https://rustup.rs/) 1.85+.
 
 ```sh
 cargo install --git https://github.com/HappyEmu/trackmedaddy.git
 ```
 
-Or clone and install locally:
+### Pre-built binaries
 
-```sh
-git clone https://github.com/HappyEmu/trackmedaddy.git
-cd trackmedaddy
-cargo install --path .
-```
-
-This installs the `trackmedaddy` binary to `~/.cargo/bin/`.
+Download the latest release for your platform from [GitHub Releases](https://github.com/HappyEmu/trackmedaddy/releases/latest).
 
 ## Setup
 

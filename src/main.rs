@@ -111,10 +111,14 @@ fn cmd_skill(agent: &str) -> Result<()> {
             )
         }
         "codex" => {
+            let agents = home.join(".agents");
             let codex = home.join(".codex");
             (
-                codex.join("instructions").join("trackmedaddy.md"),
-                vec![codex.join("instructions").join("everhour.md")],
+                agents.join("skills").join("trackmedaddy").join("SKILL.md"),
+                vec![
+                    codex.join("instructions").join("trackmedaddy.md"),
+                    codex.join("instructions").join("everhour.md"),
+                ],
             )
         }
         _ => bail!("Unknown agent \"{agent}\". Supported: claude, codex"),

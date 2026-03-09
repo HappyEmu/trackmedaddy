@@ -5,7 +5,7 @@ argument-hint: "[start|stop|status|login|logout] [TICKET]"
 allowed-tools: Bash
 ---
 
-Run `trackmedaddy` with the appropriate subcommand based on $ARGUMENTS.
+Run the `trackmedaddy` command (available on PATH) with the appropriate subcommand based on $ARGUMENTS. Important: invoke it as a plain shell command, do NOT prefix it with the skill directory path.
 
 If no arguments are provided, run `trackmedaddy status` to show the current timer.
 

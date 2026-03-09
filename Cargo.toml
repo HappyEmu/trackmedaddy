@@ -1,6 +1,6 @@
 [package]
 name = "trackmedaddy"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "CLI tool for Everhour time tracking"
 license = "MIT"
